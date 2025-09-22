@@ -2,7 +2,6 @@
 import supabase from "../lib/supabaseClient";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaApple } from "react-icons/fa";
-import { redirect } from "next/navigation";
 
 type AuthFormProps = {
   type: "login" | "signup";
@@ -16,17 +15,15 @@ async function signInWithProvider(provider: "google" | "github" | "apple") {
     return;
   }
 
-  const { error, data } = await supabase.auth.signInWithOAuth({
+  const { error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: `${window.location.origin}/dashboard`,
+      redirectTo: `${window.location.origin}/auth/callback`,
     },
   });
 
   if (error) {
     console.error(error);
-  } else {
-    return redirect(data.url);
   }
 }
 
