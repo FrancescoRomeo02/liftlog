@@ -69,6 +69,7 @@ export default function Home() {
             </button>
           </Link>
         </section>
+
         <Footer />
       </section>
     </main>

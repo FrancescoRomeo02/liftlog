@@ -19,7 +19,7 @@ async function signInWithProvider(provider: "google" | "github" | "apple") {
   const { error, data } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
+      redirectTo: `${window.location.origin}/dashboard`,
     },
   });
 
