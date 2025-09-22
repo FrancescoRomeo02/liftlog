@@ -63,7 +63,7 @@ export default function Home() {
           <p className="text-lg text-gray-600 mb-8">
             Sign up now and take control of your training journey.
           </p>
-          <Link href="/signup">
+          <Link href="/login">
             <button className="bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg shadow hover:bg-purple-800 transition">
               Create Your Free Account
             </button>

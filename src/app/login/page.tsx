@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaApple } from "react-icons/fa";
-import { login, signup } from "./actions";
+import { useState, useTransition } from "react";
+import { signup, login } from "@/action/auth";
+import { useRouter } from "next/navigation";
 
 function signInWithProvider(providerName: string) {
   alert(`Accessing with ${providerName} is not supported at this time`);
@@ -11,9 +12,35 @@ function signInWithProvider(providerName: string) {
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    startTransition(async () => {
+      const result = isLogin ? await login(formData) : await signup(formData);
+      const email = result.user?.email;
+      if (result.status === "success") {
+        if (!isLogin) {
+          router.push(
+            `/auth/confirm_page?email=${encodeURIComponent(email ? email : "")}`,
+          );
+        } else {
+          router.push("/private");
+        }
+      } else {
+        router.push(`/error?message=${encodeURIComponent(result?.status)}`);
+      }
+    });
+  }
 
   return (
-    <div className="max-w-md mx-auto mt-24 p-8 bg-gradient-to-br from-purple-50 to-white shadow-lg rounded-3xl overflow-hidden">
+    <form
+      className="max-w-md mx-auto mt-24 p-8 bg-gradient-to-br from-purple-50 to-white shadow-lg rounded-3xl overflow-hidden"
+      onSubmit={handleSubmit}
+    >
       <div className="mb-6 text-center">
         <h2 className="text-3xl font-extrabold text-gray-900">
           {isLogin ? "Welcome Back" : "Create Your Account"}
@@ -25,7 +52,7 @@ export default function AuthPage() {
         </p>
       </div>
 
-      <form className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4">
         {!isLogin && (
           <input
             type="text"
@@ -54,12 +81,12 @@ export default function AuthPage() {
 
         <button
           type="submit"
-          formAction={isLogin ? login : signup}
+          disabled={pending}
           className="w-full bg-purple-700 text-white font-medium py-3 rounded-lg shadow-sm hover:bg-purple-800 transition"
         >
           {isLogin ? "Log in" : "Sign up"}
         </button>
-      </form>
+      </section>
 
       <div className="mt-4 text-center">
         <button
@@ -113,6 +140,6 @@ export default function AuthPage() {
           .
         </p>
       </div>
-    </div>
+    </form>
   );
 }

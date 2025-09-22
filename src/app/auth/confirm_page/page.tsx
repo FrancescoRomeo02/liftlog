@@ -3,9 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 export default function VerifyEmailPage() {
-  const userEmail = "example@example.com"; // Replace with actual user email
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
 
   const handleOpenMail = () => {
     window.location.href = "mailto:";
@@ -29,7 +31,7 @@ export default function VerifyEmailPage() {
             <div>
               <p className="text-xs text-slate-400">Email sent to</p>
               <p className="font-semibold text-purple-700">
-                {userEmail ?? "indirizzo@esempio.com"}
+                {email ?? "indirizzo@esempio.com"}
               </p>
             </div>
           </div>
