@@ -1,20 +1,14 @@
-import Footer from "../../../components/footer";
-import Navbar from "../../../components/navbar";
+import { redirect } from "next/navigation";
 
-export default function dashboard() {
-  return (
-    <main className="px-10">
-      <section className="min-h-screen flex flex-col">
-        <Navbar />
-        <section className="flex-grow">
-          {/* Dashboard content */}
-          <div className="p-4">
-            <h1 className="text-2xl font-bold">Dashboard</h1>
-            <p>Welcome to your dashboard!</p>
-          </div>
-        </section>
-        <Footer />
-      </section>
-    </main>
-  );
+import { createClient } from "../../../lib/supabaseServer";
+
+export default async function PrivatePage() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data?.user) {
+    redirect("/login");
+  }
+
+  return <p>Hello {data.user.email}</p>;
 }
