@@ -22,14 +22,14 @@ export async function login(formData: FormData) {
   // check if user has an instance into user_profiles table
 
   const { data: existingUser } = await supabase
-    .from("user_profiles")
+    .from("users")
     .select("*")
     .eq("email", data?.user.email)
     .limit(1)
     .single();
 
   if (!existingUser) {
-    const { error: insertError } = await supabase.from("user_profiles").insert({
+    const { error: insertError } = await supabase.from("users").insert({
       email: data?.user.email,
       user_name: data?.user.user_metadata?.username,
     });
