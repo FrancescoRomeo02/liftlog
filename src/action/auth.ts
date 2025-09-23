@@ -17,7 +17,7 @@ export async function login(formData: FormData) {
   if (error) {
     // can be two type:
     // not confirmed email or invalid data --> need to show this info
-    redirect("/error/" + error);
+    redirect("/error");
   }
 
   if (data?.user) {
@@ -54,8 +54,7 @@ export async function signup(formData: FormData) {
   });
 
   if (error) {
-    console.error("Signup error:", error.message);
-    redirect("/error");
+    redirect("/");
   }
 
   return {
