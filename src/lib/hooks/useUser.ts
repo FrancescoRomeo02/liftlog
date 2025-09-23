@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usersQueryClient } from "@/lib/queries/profiles.client";
 import type { Database } from "@/lib/database.types";
 
 type User = Database["public"]["Tables"]["users"]["Row"];
@@ -16,10 +15,21 @@ export function useUser(userId: string) {
       try {
         setLoading(true);
         setError(null);
-        const userData = await usersQueryClient.getUser(userId);
+
+        const response = await fetch(`/api/users/${userId}`);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.error || `HTTP error! status: ${response.status}`,
+          );
+        }
+
+        const userData = await response.json();
         setUser(userData);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -27,18 +37,63 @@ export function useUser(userId: string) {
 
     if (userId) {
       fetchUser();
+    } else {
+      setLoading(false);
+      setUser(null);
+      setError(null);
     }
   }, [userId]);
 
   const refetch = async () => {
+    if (!userId) return;
+
     try {
       setError(null);
-      const userData = await usersQueryClient.getUser(userId);
+      const response = await fetch(`/api/users/${userId}`);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || `HTTP error! status: ${response.status}`,
+        );
+      }
+
+      const userData = await response.json();
       setUser(userData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     }
   };
 
-  return { user, loading, error, refetch };
+  const updateUser = async (updates: Partial<User>) => {
+    if (!userId) return;
+
+    try {
+      setError(null);
+      const response = await fetch(`/api/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updates),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || `HTTP error! status: ${response.status}`,
+        );
+      }
+
+      const updatedUser = await response.json();
+      setUser(updatedUser);
+      return updatedUser;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    }
+  };
+
+  return { user, loading, error, refetch, updateUser };
 }
