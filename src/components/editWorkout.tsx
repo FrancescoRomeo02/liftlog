@@ -30,7 +30,7 @@ export default function EditWorkout({
   const [workoutName, setWorkoutName] = useState(name);
   const [workoutNotes, setWorkoutNotes] = useState(notes);
 
-  const { updateWorkout, loading } = useWorkouts(userId);
+  const { updateWorkout, deleteWorkout, loading } = useWorkouts(userId);
 
   async function handleSave() {
     try {
@@ -38,6 +38,18 @@ export default function EditWorkout({
         name: workoutName,
         notes: workoutNotes,
       });
+      setOpen(false);
+      if (onWorkoutUpdatedAction) {
+        await onWorkoutUpdatedAction();
+      }
+    } catch (error) {
+      console.error("❌ Error con hook:", error);
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      await deleteWorkout(id);
       setOpen(false);
       if (onWorkoutUpdatedAction) {
         await onWorkoutUpdatedAction();
@@ -83,16 +95,7 @@ export default function EditWorkout({
             </div>
           </div>
 
-          <div className="flex gap-2 justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setOpen(false)}
-              disabled={loading}
-            >
-              Cancel
-            </Button>
+          <div className="flex gap-2 justify-between">
             <Button
               type="button"
               size="sm"
@@ -100,6 +103,15 @@ export default function EditWorkout({
               disabled={loading}
             >
               {loading ? "Saving..." : "Save"}
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              onClick={handleDelete}
+              disabled={loading}
+            >
+              Delete Workout
             </Button>
           </div>
         </div>
