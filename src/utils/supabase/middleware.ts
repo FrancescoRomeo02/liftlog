@@ -39,8 +39,8 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const publicPrefixes = ["/auth", "/error"]; // tutte le route sotto /auth sono pubbliche
-  const publicExact = ["/", "/login", "/signup", "/error"];
+  const publicPrefixes = ["/auth"]; // tutte le route sotto /auth sono pubbliche
+  const publicExact = ["/", "/login", "/signup", "/error", "/learn-more"];
 
   const isPublic =
     publicExact.includes(request.nextUrl.pathname) ||
