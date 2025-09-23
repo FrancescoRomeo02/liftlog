@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
+import { usersQuery } from "@/lib/queries/profiles";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
@@ -19,26 +20,12 @@ export async function login(formData: FormData) {
     redirect("/error/" + error);
   }
 
-  // check if user has an instance into user_profiles table
-
-  const { data: existingUser } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", data?.user.email)
-    .limit(1)
-    .single();
-
-  if (!existingUser) {
-    const { error: insertError } = await supabase.from("users").insert({
-      email: data?.user.email,
-      user_name: data?.user.user_metadata?.username,
+  if (data?.user) {
+    await usersQuery.insertUser({
+      email: data.user.email!,
+      user_name:
+        data.user.user_metadata?.username || data.user.email!.split("@")[0],
     });
-    if (insertError) {
-      return {
-        status: insertError.message,
-        user: null,
-      };
-    }
   }
 
   return {

@@ -2,13 +2,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "@/components/ui/card";
+import WorkoutList from "@/components/WorkoutList";
+
 import { Button } from "@/components/ui/button";
 
 export default async function DashboardPage() {
@@ -67,31 +62,7 @@ export default async function DashboardPage() {
         </section>
 
         {/* Workout Cards */}
-        <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-          {workouts.map((workout) => (
-            <Card key={workout.id} className="bg-white dark:bg-gray-900">
-              <CardHeader>
-                <CardTitle>{workout.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-gray-600 dark:text-gray-400">
-                  {workout.description}
-                </CardDescription>
-                <div className="mt-4 flex gap-2">
-                  <Button
-                    size="sm"
-                    className="bg-purple-700 dark:bg-purple-600 hover:bg-purple-800 dark:hover:bg-purple-700"
-                  >
-                    View
-                  </Button>
-                  <Button size="sm" variant="outline">
-                    Edit
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </section>
+        <WorkoutList userId={data.user.id} />
 
         <Footer />
       </section>

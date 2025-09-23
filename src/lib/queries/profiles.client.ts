@@ -1,13 +1,13 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 import type { Database } from "../database.types";
 
 type User = Database["public"]["Tables"]["users"]["Row"];
 type userInsert = Database["public"]["Tables"]["users"]["Insert"];
 type userUpdate = Database["public"]["Tables"]["users"]["Update"];
 
-export class usersQuery {
+export class usersQueryClient {
   static async getUser(userId: string): Promise<User | null> {
-    const supabase = await createClient();
+    const supabase = createClient();
     const { data, error } = await supabase
       .from("users")
       .select("*")
@@ -19,7 +19,7 @@ export class usersQuery {
   }
 
   static async updateUser(userId: string, updates: userUpdate): Promise<User> {
-    const supabase = await createClient();
+    const supabase = createClient();
     const { data, error } = await supabase
       .from("users")
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -32,7 +32,7 @@ export class usersQuery {
   }
 
   static async insertUser(user: userInsert): Promise<User | null> {
-    const supabase = await createClient();
+    const supabase = createClient();
     const { data: existingUsers, error } = await supabase
       .from("users")
       .select("*")
