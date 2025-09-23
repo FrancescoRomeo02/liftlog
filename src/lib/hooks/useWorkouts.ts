@@ -33,7 +33,7 @@ export function useWorkouts(userId: string) {
       }
 
       const data = await response.json();
-      setWorkouts(data ?? []);
+      setWorkouts([...data]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       setWorkouts([]);

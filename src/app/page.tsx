@@ -29,7 +29,7 @@ export default function Home() {
             personalized workout plans, and monitor your progress over time.
           </p>
           <div className="flex gap-4">
-            <Link href="/dashboard">
+            <Link href="/workouts">
               <Button className="bg-purple-700 dark:bg-purple-600 hover:bg-purple-800 dark:hover:bg-purple-700">
                 Get Started
               </Button>

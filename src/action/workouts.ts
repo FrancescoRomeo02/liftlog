@@ -26,6 +26,8 @@ export async function createWorkout(formData: FormData) {
 }
 
 export async function updateWorkout(workoutId: string, formData: FormData) {
+  console.log("Updating workout:", workoutId);
+
   const updates: WorkoutUpdate = {
     name: formData.get("name") as string,
     notes: (formData.get("notes") as string) || null,

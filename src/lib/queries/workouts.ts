@@ -49,7 +49,7 @@ export class WorkoutsQuery {
   static async updateWorkout(
     workoutId: string,
     updates: WorkoutUpdate,
-  ): Promise<Workout> {
+  ): Promise<void> {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("workout_plans")

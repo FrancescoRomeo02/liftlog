@@ -8,14 +8,14 @@ export async function POST(request: NextRequest) {
     if (!workoutData.user_id) {
       return NextResponse.json(
         { error: "User ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!workoutData.name) {
       return NextResponse.json(
         { error: "Workout name is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     console.error("Error creating workout:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -38,17 +38,14 @@ export async function GET(request: NextRequest) {
     if (!workoutId) {
       return NextResponse.json(
         { error: "Workout ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const workout = await WorkoutsQuery.getWorkout(workoutId);
 
     if (!workout) {
-      return NextResponse.json(
-        { error: "Workout not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Workout not found" }, { status: 404 });
     }
 
     return NextResponse.json(workout);
@@ -56,7 +53,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching workout:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -70,17 +67,20 @@ export async function PUT(request: NextRequest) {
     if (!workoutId) {
       return NextResponse.json(
         { error: "Workout ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const updatedWorkout = await WorkoutsQuery.updateWorkout(workoutId, updates);
+    const updatedWorkout = await WorkoutsQuery.updateWorkout(
+      workoutId,
+      updates,
+    );
     return NextResponse.json(updatedWorkout);
   } catch (error) {
     console.error("Error updating workout:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -93,7 +93,7 @@ export async function DELETE(request: NextRequest) {
     if (!workoutId) {
       return NextResponse.json(
         { error: "Workout ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -103,7 +103,7 @@ export async function DELETE(request: NextRequest) {
     console.error("Error deleting workout:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

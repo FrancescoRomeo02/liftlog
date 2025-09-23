@@ -11,9 +11,11 @@ import {
   CardAction,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import EditWorkout from "@/components/editWorkout";
 
 export default function WorkoutsPage({ userId }: { userId: string }) {
   const { workouts, loading, error, refetch } = useWorkouts(userId);
+
   const { user, loading: userLoading } = useUser(userId);
 
   // Skeleton array di 5 elementi
@@ -70,9 +72,13 @@ export default function WorkoutsPage({ userId }: { userId: string }) {
                 >
                   View
                 </Button>
-                <Button size="sm" variant="outline">
-                  Edit
-                </Button>
+                <EditWorkout
+                  id={w.id}
+                  name={w.name}
+                  notes={w.notes ? w.notes : ""}
+                  userId={userId}
+                  onWorkoutUpdatedAction={() => refetch()}
+                />
               </div>
             </CardContent>
           </Card>
