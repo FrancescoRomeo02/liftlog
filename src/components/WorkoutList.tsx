@@ -12,11 +12,13 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import EditWorkout from "@/components/editWorkout";
+import { useRouter } from "next/navigation";
 
 export default function WorkoutsPage({ userId }: { userId: string }) {
   const { workouts, loading, error, refetch } = useWorkouts(userId);
-
   const { user, loading: userLoading } = useUser(userId);
+
+  const router = useRouter();
 
   // Skeleton array di 5 elementi
   const skeletons = Array.from({ length: 5 });
@@ -69,6 +71,7 @@ export default function WorkoutsPage({ userId }: { userId: string }) {
                 <Button
                   size="sm"
                   className="bg-purple-700 dark:bg-purple-600 hover:bg-purple-800 dark:hover:bg-purple-700"
+                  onClick={() => router.push(`/workouts/${w.id}`)}
                 >
                   View
                 </Button>
