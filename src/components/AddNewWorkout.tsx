@@ -32,7 +32,7 @@ export default function AddNewWorkout({ userId }: { userId: string }) {
       window.location.reload();
     } catch (error) {
       console.error("Error creating workout:", error);
-      // Qui potresti gestire l'errore con un toast o altro
+      // Mettere Toast qui
     }
   };
 

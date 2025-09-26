@@ -7,7 +7,6 @@ export function createAdminClient() {
   );
 }
 
-// Esempio uso: eliminare qualsiasi record, bypassare RLS
 export async function deleteUserData(userId: string) {
   const supabase = createAdminClient();
   // Questo bypassa Row Level Security

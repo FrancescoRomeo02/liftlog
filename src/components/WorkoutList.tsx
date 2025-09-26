@@ -20,7 +20,7 @@ export default function WorkoutsPage({ userId }: { userId: string }) {
 
   const router = useRouter();
 
-  // Skeleton array di 5 elementi
+  // Skeleton array di 5 elementi --> posso farlo con loading.tsx ... error.tsx
   const skeletons = Array.from({ length: 5 });
 
   return (

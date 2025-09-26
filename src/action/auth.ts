@@ -54,7 +54,7 @@ export async function signup(formData: FormData) {
   });
 
   if (error) {
-    redirect("/"); // prew was: error/
+    redirect("/");
   }
 
   return {

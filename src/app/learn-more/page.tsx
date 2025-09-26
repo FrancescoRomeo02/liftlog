@@ -8,6 +8,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function InfoPage() {
   return (
@@ -116,9 +117,11 @@ export default function InfoPage() {
             Start organizing your workouts today and experience the difference
             of structured training.
           </p>
-          <Button className="bg-purple-700 dark:bg-purple-600 hover:bg-purple-800 dark:hover:bg-purple-700 py-3 px-8">
-            Get Started Free
-          </Button>
+          <Link href="/login">
+            <Button className="bg-purple-700 dark:bg-purple-600 hover:bg-purple-800 dark:hover:bg-purple-700">
+              Get Started Free
+            </Button>
+          </Link>
         </section>
 
         <Footer />

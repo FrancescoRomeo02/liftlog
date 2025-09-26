@@ -5,6 +5,7 @@ import { FaGithub, FaApple } from "react-icons/fa";
 import { useState, useTransition } from "react";
 import { signup, login } from "@/action/auth";
 import { useRouter } from "next/navigation";
+import { AvatarCarousel } from "@/components/AvatarCarousel";
 
 function signInWithProvider(providerName: string) {
   alert(`Accessing with ${providerName} is not supported at this time`);
@@ -13,6 +14,8 @@ function signInWithProvider(providerName: string) {
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [pending, startTransition] = useTransition();
+  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
+
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -28,7 +31,7 @@ export default function AuthPage() {
             `/auth/confirm_page?email=${encodeURIComponent(email ? email : "")}`,
           );
         } else {
-          router.push("/private");
+          router.push("/workouts");
         }
       } else {
         router.push(`/error?message=${encodeURIComponent(result?.status)}`);
