@@ -12,93 +12,81 @@ import {
 
 export default function Home() {
   return (
-    <main className="px-10 bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-      <section className="min-h-screen flex flex-col">
-        <Navbar />
+    <main className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
+      <Navbar />
 
+      <section className="flex-1 w-full max-w-6xl mx-auto px-6 md:px-12 py-12">
         {/* Hero */}
-        <section className="flex flex-col items-center text-center mt-20">
-          <h2 className="text-4xl font-extrabold mb-6 leading-snug">
-            <span className="text-purple-700 dark:text-purple-500">Track</span>{" "}
-            your workouts. <br />
-            Reach your{" "}
-            <span className="text-purple-700 dark:text-purple-500">goals</span>.
-          </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-xl mb-8">
+        <div className="text-center mb-20">
+          <h1 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6">
+            <span className="text-primary">Track</span> your workouts. <br />
+            Reach your <span className="text-primary">goals</span>.
+          </h1>
+          <p className="text-lg md:text-xl max-w-2xl mx-auto text-muted-foreground">
             LiftLog is the simplest way to log your training sessions, store
             personalized workout plans, and monitor your progress over time.
           </p>
-          <div className="flex gap-4">
+          <div className="mt-10 flex justify-center gap-4">
             <Link href="/workouts">
-              <Button className="bg-purple-700 dark:bg-purple-600 hover:bg-purple-800 dark:hover:bg-purple-700">
-                Get Started
-              </Button>
+              <Button size="lg">Get Started</Button>
             </Link>
             <Link href="/learn-more">
-              <Button
-                variant="outline"
-                className="border-gray-400 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:border-gray-600 dark:hover:border-gray-400"
-              >
+              <Button variant="outline" size="lg">
                 Learn More
               </Button>
             </Link>
           </div>
-        </section>
+        </div>
 
         {/* Features */}
-        <section className="grid md:grid-cols-3 gap-10 mt-28">
-          <Card className="bg-white dark:bg-gray-900">
+        <section className="grid md:grid-cols-3 gap-8 mt-24">
+          <Card>
             <CardHeader>
               <CardTitle>Custom Workout Plans</CardTitle>
-            </CardHeader>
-            <CardContent>
               <CardDescription>
                 Create, edit, and save routines tailored to your training goals.
               </CardDescription>
-            </CardContent>
+            </CardHeader>
+            <CardContent />
           </Card>
 
-          <Card className="bg-white dark:bg-gray-900">
+          <Card>
             <CardHeader>
               <CardTitle>Progress Tracking</CardTitle>
-            </CardHeader>
-            <CardContent>
               <CardDescription>
                 Record sets, reps, and weights to measure improvement over time.
               </CardDescription>
-            </CardContent>
+            </CardHeader>
+            <CardContent />
           </Card>
 
-          <Card className="bg-white dark:bg-gray-900">
+          <Card>
             <CardHeader>
               <CardTitle>Simple & Fast</CardTitle>
-            </CardHeader>
-            <CardContent>
               <CardDescription>
                 Log workouts in seconds with a clean, distraction-free
                 interface.
               </CardDescription>
-            </CardContent>
+            </CardHeader>
+            <CardContent />
           </Card>
         </section>
 
         {/* Call to Action */}
         <section className="text-center mt-28">
-          <h2 className="text-3xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Start lifting smarter today
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+          <p className="text-lg text-muted-foreground mb-8">
             Sign up now and take control of your training journey.
           </p>
           <Link href="/login">
-            <Button className="bg-purple-700 dark:bg-purple-600 hover:bg-purple-800 dark:hover:bg-purple-700">
-              Create Your Free Account
-            </Button>
+            <Button size="lg">Create Your Free Account</Button>
           </Link>
         </section>
-
-        <Footer />
       </section>
+
+      <Footer />
     </main>
   );
 }

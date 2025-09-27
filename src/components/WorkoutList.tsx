@@ -14,79 +14,86 @@ import { Button } from "@/components/ui/button";
 import EditWorkout from "@/components/editWorkout";
 import { useRouter } from "next/navigation";
 
+function SkeletonCard() {
+  return (
+    <Card className="overflow-hidden border bg-muted/30 relative">
+      <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-muted/40 via-muted/20 to-muted/40"></div>
+      <CardHeader className="relative">
+        <CardTitle className="h-6 w-3/4 rounded bg-muted"></CardTitle>
+        <CardDescription className="h-4 w-full rounded mt-2 bg-muted"></CardDescription>
+        <CardAction className="h-4 w-1/4 rounded mt-2 bg-muted"></CardAction>
+      </CardHeader>
+      <CardContent className="mt-4 flex gap-2">
+        <div className="h-8 w-20 rounded bg-muted"></div>
+        <div className="h-8 w-20 rounded bg-muted"></div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function WorkoutsPage({ userId }: { userId: string }) {
   const { workouts, loading, error, refetch } = useWorkouts(userId);
   const { user, loading: userLoading } = useUser(userId);
-
   const router = useRouter();
 
-  // Skeleton array di 5 elementi --> posso farlo con loading.tsx ... error.tsx
-  const skeletons = Array.from({ length: 5 });
+  if (loading) {
+    return (
+      <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <SkeletonCard key={i} />
+        ))}
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center col-span-full py-10">
+        <p className="text-red-500 font-medium">Error: {error}</p>
+        <Button onClick={refetch} className="mt-4">
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
+  if (!workouts.length) {
+    return (
+      <p className="text-center col-span-full py-10 text-muted-foreground">
+        No workouts found.
+      </p>
+    );
+  }
 
   return (
     <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-      {loading ? (
-        skeletons.map((_, i) => (
-          <Card key={i} className="bg-gray-200 dark:bg-gray-800 animate-pulse">
-            <CardHeader>
-              <CardTitle className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full mb-2"></CardDescription>
-              <div className="mt-4 flex gap-2">
-                <div className="h-8 w-20 bg-gray-300 dark:bg-gray-700 rounded"></div>
-                <div className="h-8 w-20 bg-gray-300 dark:bg-gray-700 rounded"></div>
-              </div>
-            </CardContent>
-          </Card>
-        ))
-      ) : error ? (
-        <div className="text-center col-span-full">
-          <p className="text-red-600 dark:text-red-400">Error: {error}</p>
-          <Button
-            onClick={refetch}
-            className="mt-2 bg-purple-700 dark:bg-purple-600"
-          >
-            Retry
-          </Button>
-        </div>
-      ) : workouts.length === 0 ? (
-        <p className="text-center col-span-full text-gray-600 dark:text-gray-400">
-          No workouts found.
-        </p>
-      ) : (
-        workouts.map((w) => (
-          <Card key={w.id} className="bg-white dark:bg-gray-900">
-            <CardHeader>
-              <CardTitle>{w.name}</CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400">
-                {w.notes}
-              </CardDescription>
-              <CardAction>
-                {userLoading ? "Loading..." : user?.user_name || "Unknown User"}
-              </CardAction>
-            </CardHeader>
-            <CardContent>
-              <div className="mt-4 flex gap-2">
-                <Button
-                  size="sm"
-                  className="bg-purple-700 dark:bg-purple-600 hover:bg-purple-800 dark:hover:bg-purple-700"
-                  onClick={() => router.push(`/workouts/${w.id}`)}
-                >
-                  View
-                </Button>
-                <EditWorkout
-                  id={w.id}
-                  name={w.name}
-                  notes={w.notes ? w.notes : ""}
-                  userId={userId}
-                  onWorkoutUpdatedAction={() => refetch()}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        ))
-      )}
+      {workouts.map((w) => (
+        <Card key={w.id} className="shadow-md hover:shadow-lg transition">
+          <CardHeader>
+            <CardTitle>{w.name}</CardTitle>
+            {w.notes && <CardDescription>{w.notes}</CardDescription>}
+            <CardAction>
+              {userLoading ? "Loading..." : user?.user_name || "Unknown User"}
+            </CardAction>
+          </CardHeader>
+          <CardContent className="mt-4 flex flex-wrap gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => router.push(`/workouts/${w.id}`)}
+            >
+              View
+            </Button>
+            <EditWorkout
+              id={w.id}
+              name={w.name}
+              notes={w.notes ?? ""}
+              userId={userId}
+              onWorkoutUpdatedAction={() => refetch()}
+            />
+          </CardContent>
+        </Card>
+      ))}
     </section>
   );
 }

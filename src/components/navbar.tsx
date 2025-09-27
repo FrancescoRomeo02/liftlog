@@ -41,7 +41,7 @@ export default function Navbar() {
   return (
     <nav className="flex justify-between mb-12 mt-8">
       <Link href="/">
-        <h1 className="text-xl font-bold text-purple-700">LiftLog</h1>
+        <h1 className="text-xl font-bold">LiftLog</h1>
       </Link>
       <ul className="flex items-center">
         <li className="cursor-pointer mr-8">

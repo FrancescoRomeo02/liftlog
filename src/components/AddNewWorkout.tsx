@@ -14,13 +14,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useWorkouts } from "@/lib/hooks/useWorkouts";
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 
 export default function AddNewWorkout({ userId }: { userId: string }) {
-  const { createWorkout, loading } = useWorkouts(userId);
+  const { createWorkout } = useWorkouts(userId);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    setLoading(true);
     try {
       await createWorkout({
         name: formData.get("name") as string,
@@ -28,23 +33,22 @@ export default function AddNewWorkout({ userId }: { userId: string }) {
         user_id: userId,
       });
       setOpen(false);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       window.location.reload();
     } catch (error) {
       console.error("Error creating workout:", error);
-      // Mettere Toast qui
+      // inserire toast o alert qui
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-purple-700 dark:bg-purple-600 hover:bg-purple-800 dark:hover:bg-purple-700 py-2 px-6 mb-8">
-          Create New Workout
-        </Button>
+        <Button className="py-2 px-6 mb-8">Create New Workout</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form action={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Create a new workout</DialogTitle>
             <DialogDescription>

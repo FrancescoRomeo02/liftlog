@@ -1,12 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const email = searchParams.get("email");
 
   const handleOpenMail = () => {
@@ -14,47 +15,50 @@ function VerifyEmailContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-6">
-      <Card className="w-full max-w-2xl rounded-2xl shadow-2xl border border-white/10 bg-white/5 backdrop-blur">
-        <CardContent className="p-8 grid gap-6 md:grid-cols-2 items-center">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-purple-700">
-              Check your email
-            </h1>
-            <p className="text-slate-400 leading-relaxed">
-              We have sent you an email with a verification link. Check your
-              inbox and click the link to activate your account.{" "}
-            </p>
-          </div>
-          <div className="flex items-center gap-3 bg-black/5 border border-white/10 rounded-lg px-4 py-3">
-            <Mail className="w-5 h-5 text-slate-400" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/40 p-4">
+      <Card className="w-full max-w-2xl rounded-2xl shadow-xl border">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold tracking-tight">
+            Check your email
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-8 space-y-4">
+          <p className="leading-relaxed text-muted-foreground">
+            We’ve sent you an email with a verification link. Please check your
+            inbox and click the link to activate your account.
+          </p>
+
+          <div className="flex items-center gap-3 rounded-lg border bg-muted/50 px-4 py-3">
+            <Mail className="w-5 h-5 text-primary" />
             <div>
-              <p className="text-xs text-slate-400">Email sent to</p>
-              <p className="font-semibold text-purple-700">
-                {email ?? "indirizzo@esempio.com"}
-              </p>
+              <p className="text-xs text-muted-foreground">Email sent to</p>
+              <p className="font-semibold">{email ?? "example@email.com"}</p>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Button onClick={handleOpenMail} className="shadow-md">
+            <Button onClick={handleOpenMail} className="shadow-sm">
               Open email
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => (location.href = "/login")}
-            >
+            <Button variant="outline" onClick={() => router.push("/login")}>
               Already checked
             </Button>
           </div>
 
-          <p className="text-sm text-slate-400">
-            Not receiving the email? Check your spam folder or try resend. The
-            link expires after 24 hours.
+          <p className="text-sm text-muted-foreground">
+            Not receiving the email? Check your spam folder or try resending it.
+            The link expires after 24 hours.
           </p>
-          <footer className="text-xs text-slate-500">
+
+          <footer className="text-xs text-center text-muted-foreground">
             Need help?{" "}
-            <span className="underline cursor-pointer">Contact support</span>.
+            <a
+              href="/support"
+              className="text-primary hover:underline font-medium"
+            >
+              Contact support
+            </a>
+            .
           </footer>
         </CardContent>
       </Card>

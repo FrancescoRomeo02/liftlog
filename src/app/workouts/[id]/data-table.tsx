@@ -32,15 +32,15 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="overflow-hidden rounded-md border shadow-sm">
+    <div className="overflow-hidden rounded-lg border shadow-sm bg-background">
       <Table>
-        <TableHeader className="bg-gray-50 dark:bg-gray-900">
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <TableHead
                   key={header.id}
-                  className="font-semibold text-gray-700 dark:text-gray-200"
+                  className="font-semibold text-left bg-muted text-muted-foreground"
                 >
                   {header.isPlaceholder
                     ? null
@@ -54,12 +54,12 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="hover:bg-accent/10 transition-colors"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="py-3">
@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
             <TableRow>
               <TableCell
                 colSpan={columns.length}
-                className="h-24 text-center text-gray-500"
+                className="h-24 text-center text-muted-foreground"
               >
                 No results.
               </TableCell>
