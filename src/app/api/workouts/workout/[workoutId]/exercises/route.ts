@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { workoutId: string } },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -15,8 +15,9 @@ export async function GET(
       );
     }
 
-    const plans = await WorkoutExercisesQuery.getUserWorkoutExercise(workoutId);
-    return NextResponse.json(plans);
+    const workout =
+      await WorkoutExercisesQuery.getUserWorkoutExercise(workoutId);
+    return NextResponse.json(workout);
   } catch (error) {
     console.error("Error fetching user plan's exercises:", error);
     return NextResponse.json(
@@ -31,7 +32,7 @@ export async function POST(
   { params }: { params: { workoutId: string } },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -60,7 +61,7 @@ export async function DELETE(
   { params }: { params: { workoutId: string } },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -86,7 +87,7 @@ export async function PUT(
   { params }: { params: { workoutId: string } },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await params;
 
     if (!workoutId) {
       return NextResponse.json(
