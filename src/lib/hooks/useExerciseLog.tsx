@@ -1,20 +1,22 @@
 "use client";
-
+// TODO: sistemare le api e crearne di nuove
 import { useState, useEffect, useCallback } from "react";
 import type { Database } from "@/lib/database.types";
 
-type Workout = Database["public"]["Tables"]["workout_plans"]["Row"];
-type WorkoutInsert = Database["public"]["Tables"]["workout_plans"]["Insert"];
-type WorkoutUpdate = Database["public"]["Tables"]["workout_plans"]["Update"];
+type ExerciseLog = Database["public"]["Tables"]["exercise_logs"]["Row"];
+type ExerciseLogInsert =
+  Database["public"]["Tables"]["exercise_logs"]["Insert"];
+type ExerciseLogUpdate =
+  Database["public"]["Tables"]["exercise_logs"]["Update"];
 
-export function useWorkouts(userId: string) {
-  const [workouts, setWorkouts] = useState<Workout[]>([]);
+export function usePlanExercise(planId: string) {
+  const [planExercises, setPlanExercises] = useState<ExerciseLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchWorkouts = useCallback(async () => {
-    if (!userId) {
-      setWorkouts([]);
+  const fetchExerciseLog = useCallback(async () => {
+    if (!planId) {
+      setPlanExercises([]);
       setLoading(false);
       return;
     }
@@ -23,7 +25,7 @@ export function useWorkouts(userId: string) {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/workout_plans/user/${userId}`);
+      const response = await fetch(`/api/exercise_log/${planId}`);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -33,24 +35,24 @@ export function useWorkouts(userId: string) {
       }
 
       const data = await response.json();
-      setWorkouts([...data]);
+      setPlanExercises([...data]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
-      setWorkouts([]);
+      setPlanExercises([]);
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, [planId]);
 
-  const createWorkout = async (workoutData: WorkoutInsert) => {
+  const createExerciseLog = async (exerciseData: ExerciseLogInsert) => {
     try {
       setError(null);
-      const response = await fetch("/api/workout_plans", {
+      const response = await fetch("/api/exercise_log", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(workoutData),
+        body: JSON.stringify(exerciseData),
       });
 
       if (!response.ok) {
@@ -60,9 +62,9 @@ export function useWorkouts(userId: string) {
         );
       }
 
-      const newWorkout = await response.json();
-      setWorkouts((prev) => [newWorkout, ...prev]);
-      return newWorkout;
+      const newExercise = await response.json();
+      setPlanExercises((prev) => [newExercise, ...prev]);
+      return newExercise;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
@@ -70,10 +72,13 @@ export function useWorkouts(userId: string) {
     }
   };
 
-  const updateWorkout = async (workoutId: string, updates: WorkoutUpdate) => {
+  const updateExerciseLog = async (
+    exerciseId: string,
+    updates: ExerciseLogUpdate,
+  ) => {
     try {
       setError(null);
-      const response = await fetch(`/api/workout_plans?id=${workoutId}`, {
+      const response = await fetch(`/api/exercise_log?id=${exerciseId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -88,11 +93,11 @@ export function useWorkouts(userId: string) {
         );
       }
 
-      const updatedWorkout = await response.json();
-      setWorkouts((prev) =>
-        prev.map((w) => (w.id === workoutId ? updatedWorkout : w)),
+      const updatedExercise = await response.json();
+      setPlanExercises((prev) =>
+        prev.map((e) => (e.id === exerciseId ? updatedExercise : e)),
       );
-      return updatedWorkout;
+      return updatedExercise;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
@@ -100,10 +105,10 @@ export function useWorkouts(userId: string) {
     }
   };
 
-  const deleteWorkout = async (workoutId: string) => {
+  const deleteExerciseLog = async (exerciseId: string) => {
     try {
       setError(null);
-      const response = await fetch(`/api/workout_plans?id=${workoutId}`, {
+      const response = await fetch(`/api/exercise_log?id=${exerciseId}`, {
         method: "DELETE",
       });
 
@@ -114,7 +119,7 @@ export function useWorkouts(userId: string) {
         );
       }
 
-      setWorkouts((prev) => prev.filter((w) => w.id !== workoutId));
+      setPlanExercises((prev) => prev.filter((e) => e.id !== exerciseId));
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
@@ -122,9 +127,11 @@ export function useWorkouts(userId: string) {
     }
   };
 
-  const getWorkout = async (workoutId: string): Promise<Workout | null> => {
+  const getExerciseLog = async (
+    workoutId: string,
+  ): Promise<ExerciseLog | null> => {
     try {
-      const response = await fetch(`/api/workout_plans?id=${workoutId}`);
+      const response = await fetch(`/api/exercise_log?id=${workoutId}`);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -142,17 +149,17 @@ export function useWorkouts(userId: string) {
   };
 
   useEffect(() => {
-    fetchWorkouts();
-  }, [fetchWorkouts]);
+    fetchExerciseLog();
+  }, [fetchExerciseLog]);
 
   return {
-    workouts,
+    planExercises,
     loading,
     error,
-    refetch: fetchWorkouts,
-    createWorkout,
-    updateWorkout,
-    deleteWorkout,
-    getWorkout,
+    refetch: fetchExerciseLog,
+    createExerciseLog,
+    updateExerciseLog,
+    deleteExerciseLog,
+    getExerciseLog,
   };
 }

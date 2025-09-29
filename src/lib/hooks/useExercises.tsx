@@ -3,27 +3,21 @@
 import { useState, useEffect, useCallback } from "react";
 import type { Database } from "@/lib/database.types";
 
-type Exercise = Database["public"]["Tables"]["workout_plans"]["Row"];
-type ExerciseInsert = Database["public"]["Tables"]["workout_plans"]["Insert"];
-type ExerciseUpdate = Database["public"]["Tables"]["workout_plans"]["Update"];
+type Exercise = Database["public"]["Tables"]["exercises"]["Row"];
+type ExerciseInsert = Database["public"]["Tables"]["exercises"]["Insert"];
+type ExerciseUpdate = Database["public"]["Tables"]["exercises"]["Update"];
 
-export function useExercises(userId: string) {
+export function useExercises() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchExercises = useCallback(async () => {
-    if (!userId) {
-      setExercises([]);
-      setLoading(false);
-      return;
-    }
-
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/exercises/user/${userId}`);
+      const response = await fetch(`/api/exercises/`);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -40,11 +34,37 @@ export function useExercises(userId: string) {
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, []);
 
   const createExercise = async (exerciseData: ExerciseInsert) => {
+    console.log("Creating exercise...");
     try {
       setError(null);
+
+      // check if exercise already exists by name
+      const checkResponse = await fetch(
+        `/api/exercises?name=${encodeURIComponent(exerciseData.name)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (checkResponse.ok) {
+        const existing = await checkResponse.json();
+        console.log("Exercise already exists:", existing);
+        return existing; // non creare duplicato
+      }
+
+      if (checkResponse.status !== 404) {
+        throw new Error(
+          `Unexpected response when checking existence: ${checkResponse.status}`,
+        );
+      }
+
+      // not found → create new
       const response = await fetch("/api/exercises", {
         method: "POST",
         headers: {
@@ -64,6 +84,7 @@ export function useExercises(userId: string) {
       setExercises((prev) => [newExercise, ...prev]);
       return newExercise;
     } catch (err) {
+      console.log("Error creating exercise:", err);
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       throw new Error(errorMessage);
@@ -74,6 +95,7 @@ export function useExercises(userId: string) {
     exerciseId: string,
     updates: ExerciseUpdate,
   ) => {
+    console.log("Updating exercise...");
     try {
       setError(null);
       const response = await fetch(`/api/exercises?id=${exerciseId}`, {
@@ -104,6 +126,7 @@ export function useExercises(userId: string) {
   };
 
   const deleteExercise = async (exerciseId: string) => {
+    console.log("Deleting exercise...");
     try {
       setError(null);
       const response = await fetch(`/api/exercises?id=${exerciseId}`, {
@@ -127,7 +150,7 @@ export function useExercises(userId: string) {
 
   const getExercise = async (workoutId: string): Promise<Exercise | null> => {
     try {
-      const response = await fetch(`/api/workouts?id=${workoutId}`);
+      const response = await fetch(`/api/exercises?id=${workoutId}`);
 
       if (!response.ok) {
         const errorData = await response.json();

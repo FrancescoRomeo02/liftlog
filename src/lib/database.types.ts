@@ -56,7 +56,6 @@ export type Database = {
           name: string;
         };
         Insert: {
-          id?: string;
           muscle_group: string;
           name: string;
         };
@@ -79,9 +78,7 @@ export type Database = {
           weight: number | null;
         };
         Insert: {
-          created_at?: string | null;
           exercise_id: string;
-          id?: string;
           notes?: string | null;
           plan_id: string;
           reps: number;
@@ -97,6 +94,9 @@ export type Database = {
           reps?: number;
           sets?: number;
           weight?: number | null;
+        };
+        Delete: {
+          id: string;
         };
         Relationships: [
           {
