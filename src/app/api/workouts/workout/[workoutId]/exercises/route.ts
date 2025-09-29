@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { workoutId: string } },
 ) {
   try {
-    const { workoutId } = await params;
+    const { workoutId } = params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -32,7 +32,7 @@ export async function POST(
   { params }: { params: { workoutId: string } },
 ) {
   try {
-    const { workoutId } = await params;
+    const { workoutId } = params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -61,7 +61,7 @@ export async function DELETE(
   { params }: { params: { workoutId: string } },
 ) {
   try {
-    const { workoutId } = await params;
+    const { workoutId } = params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -87,7 +87,7 @@ export async function PUT(
   { params }: { params: { workoutId: string } },
 ) {
   try {
-    const { workoutId } = await params;
+    const { workoutId } = params;
 
     if (!workoutId) {
       return NextResponse.json(

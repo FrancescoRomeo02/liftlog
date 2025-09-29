@@ -1,6 +1,5 @@
 "use client";
 
-import { use } from "react";
 import { getColumns } from "./columns";
 import { DataTable } from "./data-table";
 import Footer from "@/components/footer";
@@ -9,13 +8,13 @@ import AddExercise from "@/components/AddExerciseWorkout";
 import { useWorkoutExercises } from "@/lib/hooks/useWorkoutExercises";
 
 interface WorkoutPageProps {
-  params: Promise<{
+  params: {
     id: string;
-  }>;
+  };
 }
 
 export default function WorkoutPage({ params }: WorkoutPageProps) {
-  const { id } = use(params);
+  const { id } = params;
   const {
     workoutExercises,
     updateWorkoutExercise,
