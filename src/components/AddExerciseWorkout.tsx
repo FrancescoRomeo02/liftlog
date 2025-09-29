@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { muscleGroups } from "@/lib/muscleGroups";
 import { useExercises } from "@/lib/hooks/useExercises";
-import { usePlanExercises } from "@/lib/hooks/usePlanExercises";
+import { useWorkoutExercises } from "@/lib/hooks/useWorkoutExercises";
 
 export default function AddExercise({
   workoutId,
@@ -38,7 +38,7 @@ export default function AddExercise({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { createExercise } = useExercises();
-  const { createPlanExercise } = usePlanExercises(workoutId);
+  const { createWorkoutExercise } = useWorkoutExercises(workoutId);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,7 +46,7 @@ export default function AddExercise({
     setLoading(true);
     // flow:
     // 1. create exercise row (if not preset)
-    // 2. create plane exercise row using exercise id
+    // 2. create workoute exercise row using exercise id
 
     try {
       // 1. create exercise row
@@ -59,21 +59,22 @@ export default function AddExercise({
         throw new Error("Failed to create exercise");
       }
 
-      // 2. create plane exercise row
+      // 2. create workoute exercise row
       const num_reps = parseFloat(formData.get("reps") as string);
       const num_sets = parseFloat(formData.get("sets") as string);
       const num_weight = parseFloat(formData.get("weight") as string);
-      const planeExerciseItem = {
+      const workouteExerciseItem = {
         exercise_id: newExercise.id,
-        plan_id: workoutId,
+        workout_id: workoutId,
         reps: num_reps as number,
         sets: num_sets as number,
         weight: num_weight as number,
         notes: formData.get("notes") as string,
       };
-      const newPlaneExercise = await createPlanExercise(planeExerciseItem);
-      if (!newPlaneExercise) {
-        throw new Error("Failed to create plane exercise");
+      const newWorkouteExercise =
+        await createWorkoutExercise(workouteExerciseItem);
+      if (!newWorkouteExercise) {
+        throw new Error("Failed to create workoute exercise");
       }
       await refetchAction();
       setOpen(false);

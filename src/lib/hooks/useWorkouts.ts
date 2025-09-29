@@ -3,9 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import type { Database } from "@/lib/database.types";
 
-type Workout = Database["public"]["Tables"]["workout_plans"]["Row"];
-type WorkoutInsert = Database["public"]["Tables"]["workout_plans"]["Insert"];
-type WorkoutUpdate = Database["public"]["Tables"]["workout_plans"]["Update"];
+type Workout = Database["public"]["Tables"]["workouts"]["Row"];
+type WorkoutInsert = Database["public"]["Tables"]["workouts"]["Insert"];
+type WorkoutUpdate = Database["public"]["Tables"]["workouts"]["Update"];
 
 export function useWorkouts(userId: string) {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -23,7 +23,7 @@ export function useWorkouts(userId: string) {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/workout_plans/user/${userId}`);
+      const response = await fetch(`/api/workouts/user/${userId}`);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -45,7 +45,7 @@ export function useWorkouts(userId: string) {
   const createWorkout = async (workoutData: WorkoutInsert) => {
     try {
       setError(null);
-      const response = await fetch("/api/workout_plans", {
+      const response = await fetch("/api/workouts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export function useWorkouts(userId: string) {
   const updateWorkout = async (workoutId: string, updates: WorkoutUpdate) => {
     try {
       setError(null);
-      const response = await fetch(`/api/workout_plans?id=${workoutId}`, {
+      const response = await fetch(`/api/workouts?id=${workoutId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export function useWorkouts(userId: string) {
   const deleteWorkout = async (workoutId: string) => {
     try {
       setError(null);
-      const response = await fetch(`/api/workout_plans?id=${workoutId}`, {
+      const response = await fetch(`/api/workouts?id=${workoutId}`, {
         method: "DELETE",
       });
 
@@ -124,7 +124,7 @@ export function useWorkouts(userId: string) {
 
   const getWorkout = async (workoutId: string): Promise<Workout | null> => {
     try {
-      const response = await fetch(`/api/workout_plans?id=${workoutId}`);
+      const response = await fetch(`/api/workouts?id=${workoutId}`);
 
       if (!response.ok) {
         const errorData = await response.json();

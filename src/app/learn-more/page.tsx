@@ -125,7 +125,8 @@ export default function InfoPage() {
                   Efficiency
                 </CardTitle>
                 <CardDescription className="text-muted-foreground">
-                  Plan ahead and focus on training instead of remembering sets.
+                  Workout ahead and focus on training instead of remembering
+                  sets.
                 </CardDescription>
               </CardHeader>
               <CardContent />

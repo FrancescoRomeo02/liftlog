@@ -66,13 +66,13 @@ export type Database = {
         };
         Relationships: [];
       };
-      plan_exercises: {
+      workout_exercises: {
         Row: {
           created_at: string | null;
           exercise_id: string;
           id: string;
           notes: string | null;
-          plan_id: string;
+          workout_id: string;
           reps: number;
           sets: number;
           weight: number | null;
@@ -80,7 +80,7 @@ export type Database = {
         Insert: {
           exercise_id: string;
           notes?: string | null;
-          plan_id: string;
+          workout_id: string;
           reps: number;
           sets: number;
           weight?: number | null;
@@ -90,7 +90,7 @@ export type Database = {
           exercise_id?: string;
           id?: string;
           notes?: string | null;
-          plan_id?: string;
+          workout_id?: string;
           reps?: number;
           sets?: number;
           weight?: number | null;
@@ -107,8 +107,8 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "plan_exercises_plan_id_fkey";
-            columns: ["plan_id"];
+            foreignKeyName: "plan_exercises_workout_id_fkey";
+            columns: ["workout_id"];
             isOneToOne: false;
             referencedRelation: "workout_plans";
             referencedColumns: ["id"];
@@ -132,7 +132,7 @@ export type Database = {
         };
         Relationships: [];
       };
-      workout_plans: {
+      workouts: {
         Row: {
           created_at: string | null;
           id: string;

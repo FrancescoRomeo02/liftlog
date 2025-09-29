@@ -95,7 +95,7 @@ export function getColumns({
               />
               <DeleteExerciseDialog
                 exercise={exercise}
-                onConfirm={(id) => onDeleteAction(id)}
+                onConfirmAction={(id) => onDeleteAction(id)}
               />
             </DropdownMenuContent>
           </DropdownMenu>

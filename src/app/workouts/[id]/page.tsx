@@ -5,8 +5,8 @@ import { getColumns } from "./columns";
 import { DataTable } from "./data-table";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
-import AddExercise from "@/components/AddExercisePlan";
-import { usePlanExercises } from "@/lib/hooks/usePlanExercises";
+import AddExercise from "@/components/AddExerciseWorkout";
+import { useWorkoutExercises } from "@/lib/hooks/useWorkoutExercises";
 
 interface WorkoutPageProps {
   params: Promise<{
@@ -17,15 +17,15 @@ interface WorkoutPageProps {
 export default function WorkoutPage({ params }: WorkoutPageProps) {
   const { id } = use(params);
   const {
-    planExercises,
-    updatePlanExercise,
-    deletePlanExercise,
+    workoutExercises,
+    updateWorkoutExercise,
+    deleteWorkoutExercise,
     loading,
     error,
     refetch,
-  } = usePlanExercises(id);
+  } = useWorkoutExercises(id);
 
-  const mappedData = planExercises.map((item) => ({
+  const mappedData = workoutExercises.map((item) => ({
     id: item.id,
     name: item.exercises?.name,
     muscle_group: item.exercises?.muscle_group,
@@ -36,8 +36,8 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
   }));
 
   const columns = getColumns({
-    onUpdateAction: updatePlanExercise,
-    onDeleteAction: deletePlanExercise,
+    onUpdateAction: updateWorkoutExercise,
+    onDeleteAction: deleteWorkoutExercise,
   });
 
   return (

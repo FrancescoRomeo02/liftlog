@@ -14,10 +14,10 @@ import type { Exercise } from "../columns";
 
 export function DeleteExerciseDialog({
   exercise,
-  onConfirm,
+  onConfirmAction,
 }: {
   exercise: Exercise;
-  onConfirm: (id: string) => void;
+  onConfirmAction: (id: string) => void;
 }) {
   return (
     <Dialog>
@@ -43,7 +43,7 @@ export function DeleteExerciseDialog({
           <Button
             variant="destructive"
             onClick={() => {
-              onConfirm(exercise.id);
+              onConfirmAction(exercise.id);
             }}
           >
             Delete

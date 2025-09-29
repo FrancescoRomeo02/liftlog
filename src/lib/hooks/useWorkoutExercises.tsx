@@ -1,14 +1,14 @@
 "use client";
-// TODO: sistemare le api e crearne di nuove
+
 import { useState, useEffect, useCallback } from "react";
 import type { Database } from "@/lib/database.types";
 
-type PlanExercise = Database["public"]["Tables"]["plan_exercises"]["Row"];
-type PlanExerciseInsert =
-  Database["public"]["Tables"]["plan_exercises"]["Insert"];
-type PlanExerciseUpdate =
-  Database["public"]["Tables"]["plan_exercises"]["Update"];
-type PlanExerciseEnriched = PlanExercise & {
+type WorkoutExercise = Database["public"]["Tables"]["workout_exercises"]["Row"];
+type WorkoutExerciseInsert =
+  Database["public"]["Tables"]["workout_exercises"]["Insert"];
+type WorkoutExerciseUpdate =
+  Database["public"]["Tables"]["workout_exercises"]["Update"];
+type WorkoutExerciseEnriched = WorkoutExercise & {
   exercises: {
     id: string;
     name: string;
@@ -16,16 +16,16 @@ type PlanExerciseEnriched = PlanExercise & {
   };
 };
 
-export function usePlanExercises(planId: string) {
-  const [planExercises, setPlanExercises] = useState<PlanExerciseEnriched[]>(
-    [],
-  );
+export function useWorkoutExercises(workoutId: string) {
+  const [workoutExercises, setWorkoutExercises] = useState<
+    WorkoutExerciseEnriched[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPlanExercises = useCallback(async () => {
-    if (!planId) {
-      setPlanExercises([]);
+  const fetchWorkoutExercises = useCallback(async () => {
+    if (!workoutId) {
+      setWorkoutExercises([]);
       setLoading(false);
       return;
     }
@@ -34,7 +34,7 @@ export function usePlanExercises(planId: string) {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/plan_exercises/${planId}`);
+      const response = await fetch(`/api/workouts/workout/${workoutId}`);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -43,21 +43,21 @@ export function usePlanExercises(planId: string) {
         );
       }
 
-      const data: PlanExerciseEnriched[] = await response.json();
+      const data: WorkoutExerciseEnriched[] = await response.json();
       console.log("Response (2):", data);
-      setPlanExercises(data);
+      setWorkoutExercises(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
-      setPlanExercises([]);
+      setWorkoutExercises([]);
     } finally {
       setLoading(false);
     }
-  }, [planId]);
+  }, [workoutId]);
 
-  const createPlanExercise = async (exerciseData: PlanExerciseInsert) => {
+  const createWorkoutExercise = async (exerciseData: WorkoutExerciseInsert) => {
     try {
       setError(null);
-      const response = await fetch(`/api/plan_exercises/${planId}`, {
+      const response = await fetch(`/api/workouts/workout/${workoutId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export function usePlanExercises(planId: string) {
       }
 
       const newExercise = await response.json();
-      setPlanExercises((prev) => [newExercise, ...prev]);
+      setWorkoutExercises((prev) => [newExercise, ...prev]);
       return newExercise;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
@@ -82,13 +82,13 @@ export function usePlanExercises(planId: string) {
     }
   };
 
-  const updatePlanExercise = async (
+  const updateWorkoutExercise = async (
     exerciseId: string,
-    updates: PlanExerciseUpdate,
+    updates: WorkoutExerciseUpdate,
   ) => {
     try {
       setError(null);
-      const response = await fetch(`/api/plan_exercises?id=${exerciseId}`, {
+      const response = await fetch(`/api/workout_exercises?id=${exerciseId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +104,7 @@ export function usePlanExercises(planId: string) {
       }
 
       const updatedExercise = await response.json();
-      setPlanExercises((prev) =>
+      setWorkoutExercises((prev) =>
         prev.map((e) => (e.id === exerciseId ? updatedExercise : e)),
       );
       return updatedExercise;
@@ -115,10 +115,10 @@ export function usePlanExercises(planId: string) {
     }
   };
 
-  const deletePlanExercise = async (exerciseId: string) => {
+  const deleteWorkoutExercise = async (exerciseId: string) => {
     try {
       setError(null);
-      const response = await fetch(`/api/plan_exercises?id=${exerciseId}`, {
+      const response = await fetch(`/api/workout_exercises?id=${exerciseId}`, {
         method: "DELETE",
       });
 
@@ -129,7 +129,7 @@ export function usePlanExercises(planId: string) {
         );
       }
 
-      setPlanExercises((prev) => prev.filter((e) => e.id !== exerciseId));
+      setWorkoutExercises((prev) => prev.filter((e) => e.id !== exerciseId));
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
@@ -137,11 +137,11 @@ export function usePlanExercises(planId: string) {
     }
   };
 
-  const getPlanExercise = async (
-    planId: string,
-  ): Promise<PlanExercise | null> => {
+  const getWorkoutExercise = async (
+    exerciseId: string,
+  ): Promise<WorkoutExercise | null> => {
     try {
-      const response = await fetch(`/api/plan_exercises/${planId}`);
+      const response = await fetch(`/api/workout_exercises?id=${exerciseId}`);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -159,17 +159,17 @@ export function usePlanExercises(planId: string) {
   };
 
   useEffect(() => {
-    fetchPlanExercises();
-  }, [fetchPlanExercises]);
+    fetchWorkoutExercises();
+  }, [fetchWorkoutExercises]);
 
   return {
-    planExercises,
+    workoutExercises,
     loading,
     error,
-    refetch: fetchPlanExercises,
-    createPlanExercise,
-    updatePlanExercise,
-    deletePlanExercise,
-    getPlanExercise,
+    refetch: fetchWorkoutExercises,
+    createWorkoutExercise,
+    updateWorkoutExercise,
+    deleteWorkoutExercise,
+    getWorkoutExercise,
   };
 }
