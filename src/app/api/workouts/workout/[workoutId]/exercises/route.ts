@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { WorkoutsQuery } from "@/lib/queries/workouts";
+import { WorkoutExercisesQuery } from "@/lib/queries/workoutExercises";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { workoutId: string } },
 ) {
   try {
-    const workoutId = params;
+    const { workoutId } = params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -15,10 +15,39 @@ export async function GET(
       );
     }
 
-    const plans = await WorkoutsQuery.getUserWorkouts(workoutId.workoutId);
+    const plans = await WorkoutExercisesQuery.getUserWorkoutExercise(workoutId);
     return NextResponse.json(plans);
   } catch (error) {
     console.error("Error fetching user plan's exercises:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { workoutId: string } },
+) {
+  try {
+    const { workoutId } = params;
+
+    if (!workoutId) {
+      return NextResponse.json(
+        { error: "Workout ID is required (post)" },
+        { status: 400 },
+      );
+    }
+
+    const data = await request.json();
+    const planExercise = await WorkoutExercisesQuery.createWorkoutExercise(
+      workoutId,
+      data,
+    );
+    return NextResponse.json(planExercise);
+  } catch (error) {
+    console.error("Error creating user plan's exercise:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
@@ -40,8 +69,9 @@ export async function DELETE(
       );
     }
 
-    await WorkoutsQuery.deleteWorkout(workoutId);
-    return NextResponse.json(true);
+    const planExercise =
+      await WorkoutExercisesQuery.deleteWorkoutExercise(workoutId);
+    return NextResponse.json(planExercise);
   } catch (error) {
     console.error("Error deleting user plan's exercise:", error);
     return NextResponse.json(
@@ -66,7 +96,10 @@ export async function PUT(
     }
 
     const data = await request.json();
-    const planExercise = await WorkoutsQuery.updateWorkout(workoutId, data);
+    const planExercise = await WorkoutExercisesQuery.updateWorkoutExercise(
+      workoutId,
+      data,
+    );
     return NextResponse.json(planExercise);
   } catch (error) {
     console.error("Error updating user plan's exercise:", error);

@@ -86,11 +86,8 @@ export type Database = {
           weight?: number | null;
         };
         Update: {
-          created_at?: string | null;
-          exercise_id?: string;
           id?: string;
           notes?: string | null;
-          workout_id?: string;
           reps?: number;
           sets?: number;
           weight?: number | null;

@@ -1,4 +1,3 @@
-// app/api/workout_exercises/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { WorkoutExercisesQuery } from "@/lib/queries/workoutExercises";
 

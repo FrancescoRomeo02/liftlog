@@ -73,7 +73,7 @@ export function useWorkouts(userId: string) {
   const updateWorkout = async (workoutId: string, updates: WorkoutUpdate) => {
     try {
       setError(null);
-      const response = await fetch(`/api/workouts?id=${workoutId}`, {
+      const response = await fetch(`/api/workouts/workout/${workoutId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export function useWorkouts(userId: string) {
   const deleteWorkout = async (workoutId: string) => {
     try {
       setError(null);
-      const response = await fetch(`/api/workouts?id=${workoutId}`, {
+      const response = await fetch(`/api/workouts/workout/${workoutId}`, {
         method: "DELETE",
       });
 
@@ -124,7 +124,7 @@ export function useWorkouts(userId: string) {
 
   const getWorkout = async (workoutId: string): Promise<Workout | null> => {
     try {
-      const response = await fetch(`/api/workouts?id=${workoutId}`);
+      const response = await fetch(`/api/workouts/workout/${workoutId}`);
 
       if (!response.ok) {
         const errorData = await response.json();

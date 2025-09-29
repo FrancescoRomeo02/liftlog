@@ -39,7 +39,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between mb-12 mt-8">
+    <nav className="flex justify-between mb-12 mt-8 mr-8 ml-8">
       <Link href="/">
         <h1 className="text-xl font-bold">LiftLog</h1>
       </Link>

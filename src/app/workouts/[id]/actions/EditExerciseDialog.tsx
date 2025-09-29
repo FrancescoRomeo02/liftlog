@@ -16,10 +16,10 @@ import type { Exercise } from "../columns";
 
 export function EditExerciseDialog({
   exercise,
-  onSave,
+  onSaveAction,
 }: {
   exercise: Exercise;
-  onSave: (updated: Exercise) => void;
+  onSaveAction: (updated: Exercise) => void;
 }) {
   const [form, setForm] = React.useState(exercise);
 
@@ -42,15 +42,6 @@ export function EditExerciseDialog({
           <DialogTitle>Edit Exercise</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-2">
-          <div>
-            <Label>Name</Label>
-            <Input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Exercise name"
-            />
-          </div>
           <div className="grid grid-cols-3 gap-4 py-2">
             <div>
               <Label>Reps</Label>
@@ -93,7 +84,7 @@ export function EditExerciseDialog({
         <DialogFooter>
           <Button
             onClick={() => {
-              onSave(form);
+              onSaveAction({ ...exercise, ...form });
             }}
           >
             Save

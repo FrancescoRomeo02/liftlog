@@ -34,7 +34,9 @@ export function useWorkoutExercises(workoutId: string) {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/workouts/workout/${workoutId}`);
+      const response = await fetch(
+        `/api/workouts/workout/${workoutId}/exercises`,
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -57,13 +59,16 @@ export function useWorkoutExercises(workoutId: string) {
   const createWorkoutExercise = async (exerciseData: WorkoutExerciseInsert) => {
     try {
       setError(null);
-      const response = await fetch(`/api/workouts/workout/${workoutId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `/api/workouts/workout/${workoutId}/exercises`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(exerciseData),
         },
-        body: JSON.stringify(exerciseData),
-      });
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -79,6 +84,8 @@ export function useWorkoutExercises(workoutId: string) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,6 +93,7 @@ export function useWorkoutExercises(workoutId: string) {
     exerciseId: string,
     updates: WorkoutExerciseUpdate,
   ) => {
+    console.log("Updating workout exercise:", exerciseId, updates);
     try {
       setError(null);
       const response = await fetch(`/api/workout_exercises?id=${exerciseId}`, {
@@ -112,6 +120,8 @@ export function useWorkoutExercises(workoutId: string) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -134,6 +144,8 @@ export function useWorkoutExercises(workoutId: string) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -155,6 +167,8 @@ export function useWorkoutExercises(workoutId: string) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 

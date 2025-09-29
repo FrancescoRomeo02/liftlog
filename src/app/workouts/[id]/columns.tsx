@@ -1,5 +1,5 @@
 "use client";
-
+import { muscleGroups } from "@/lib/muscleGroups";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +24,26 @@ type ColumnsProps = {
   onUpdateAction: (id: string, updates: Partial<Exercise>) => void;
   onDeleteAction: (id: string) => void;
 };
-
+const macroColors: Record<string, string> = {
+  Chest: "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-300",
+  Back: "bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-300",
+  Arms: "bg-yellow-100 text-yellow-700 dark:bg-yellow-800 dark:text-yellow-300",
+  Legs: "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300",
+  Core: "bg-purple-100 text-purple-700 dark:bg-purple-800 dark:text-purple-300",
+  Shoulders:
+    "bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300", // esempio aggiunto
+};
+export const colors: Record<string, string> = Object.entries(
+  muscleGroups,
+).reduce(
+  (acc, [macro, subs]) => {
+    subs.forEach(({ value }) => {
+      acc[value] = macroColors[macro];
+    });
+    return acc;
+  },
+  {} as Record<string, string>,
+);
 export function getColumns({
   onUpdateAction,
   onDeleteAction,
@@ -35,13 +54,6 @@ export function getColumns({
       header: "Muscle Group",
       cell: ({ row }) => {
         const group = row.getValue("muscle_group") as Exercise["muscle_group"];
-        const colors: Record<Exercise["muscle_group"], string> = {
-          chest: "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-300",
-          back: "bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-300",
-          arms: "bg-yellow-100 text-yellow-700 dark:bg-yellow-800 dark:text-yellow-300",
-          legs: "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300",
-          core: "bg-purple-100 text-purple-700 dark:bg-purple-800 dark:text-purple-300",
-        };
         return (
           <Badge
             variant="secondary"
@@ -89,10 +101,10 @@ export function getColumns({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <EditExerciseDialog
+              {/*<EditExerciseDialog
                 exercise={exercise}
-                onSave={(updated) => onUpdateAction(exercise.id, updated)}
-              />
+                onSaveAction={(updated) => onUpdateAction(exercise.id, updated)}
+              />*/}
               <DeleteExerciseDialog
                 exercise={exercise}
                 onConfirmAction={(id) => onDeleteAction(id)}
