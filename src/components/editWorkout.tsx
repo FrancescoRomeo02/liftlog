@@ -61,7 +61,7 @@ export default function EditWorkout({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button size="sm" variant="outline">
+        <Button size="sm" variant="secondary">
           Edit
         </Button>
       </PopoverTrigger>

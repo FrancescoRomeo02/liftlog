@@ -130,11 +130,15 @@ export default function AddExercise({
           {/* SETS & REPS */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label htmlFor="sets">Sets</Label>
+              <Label htmlFor="sets" className="mb-2">
+                Sets
+              </Label>
               <Input id="sets" name="sets" type="number" min="1" required />
             </div>
             <div>
-              <Label htmlFor="reps">Reps</Label>
+              <Label htmlFor="reps" className="mb-2">
+                Reps
+              </Label>
               <Input id="reps" name="reps" type="number" min="1" required />
             </div>
           </div>

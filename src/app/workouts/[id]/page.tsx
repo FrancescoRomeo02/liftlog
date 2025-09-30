@@ -6,15 +6,16 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import AddExercise from "@/components/AddExerciseWorkout";
 import { useWorkoutExercises } from "@/lib/hooks/useWorkoutExercises";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { use } from "react";
 
 interface WorkoutPageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
 export default function WorkoutPage({ params }: WorkoutPageProps) {
-  const { id } = params;
+  const { id } = use(params);
   const {
     workoutExercises,
     updateWorkoutExercise,
@@ -48,6 +49,15 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
           <h1 className="text-3xl md:text-4xl font-extrabold leading-tight tracking-tight">
             Your <span className="bg-clip-text text-primary">Exercises</span>
           </h1>
+        </div>
+
+        {/* Bottone per iniziare l'allenamento */}
+        <div className="flex justify-center mb-8">
+          <Link href={`/workouts/${id}/start`} passHref>
+            <Button variant="default" size="lg">
+              Inizia Allenamento
+            </Button>
+          </Link>
         </div>
 
         <div className="overflow-hidden rounded-xl border border-border shadow-sm">

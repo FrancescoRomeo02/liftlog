@@ -72,14 +72,14 @@ export default function WorkoutsPage({ userId }: { userId: string }) {
           <CardHeader>
             <CardTitle>{w.name}</CardTitle>
             {w.notes && <CardDescription>{w.notes}</CardDescription>}
-            <CardAction>
+            <CardAction className="italic font-light text-xs">
               {userLoading ? "Loading..." : user?.user_name || "Unknown User"}
             </CardAction>
           </CardHeader>
-          <CardContent className="mt-4 flex flex-wrap gap-2">
+          <CardContent className="mt-4 flex flex-wrap gap-4">
             <Button
               size="sm"
-              variant="outline"
+              variant="default"
               onClick={() => router.push(`/workouts/${w.id}`)}
             >
               View
