@@ -3,11 +3,10 @@ import { WorkoutsQuery } from "@/lib/queries/workouts";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { workoutId: string } },
+  context: { params: Promise<{ workoutId: string }> },
 ) {
   try {
-    const workoutId = params;
-
+    const { workoutId } = await context.params;
     if (!workoutId) {
       return NextResponse.json(
         { error: "Workout ID is required (get)" },
@@ -15,7 +14,7 @@ export async function GET(
       );
     }
 
-    const plans = await WorkoutsQuery.getUserWorkouts(workoutId.workoutId);
+    const plans = await WorkoutsQuery.getUserWorkouts(workoutId);
     return NextResponse.json(plans);
   } catch (error) {
     console.error("Error fetching user plan's exercises:", error);
@@ -28,10 +27,10 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { workoutId: string } },
+  context: { params: Promise<{ workoutId: string }> },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await context.params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -53,10 +52,10 @@ export async function DELETE(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { workoutId: string } },
+  context: { params: Promise<{ workoutId: string }> },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await context.params;
 
     if (!workoutId) {
       return NextResponse.json(

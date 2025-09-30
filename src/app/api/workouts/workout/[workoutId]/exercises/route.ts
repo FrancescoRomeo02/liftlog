@@ -3,10 +3,10 @@ import { WorkoutExercisesQuery } from "@/lib/queries/workoutExercises";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { workoutId: string } },
+  context: { params: Promise<{ workoutId: string }> },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await context.params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -29,10 +29,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { workoutId: string } },
+  context: { params: Promise<{ workoutId: string }> },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await context.params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -58,10 +58,10 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { workoutId: string } },
+  context: { params: Promise<{ workoutId: string }> },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await context.params;
 
     if (!workoutId) {
       return NextResponse.json(
@@ -84,10 +84,10 @@ export async function DELETE(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { workoutId: string } },
+  context: { params: Promise<{ workoutId: string }> },
 ) {
   try {
-    const { workoutId } = params;
+    const { workoutId } = await context.params;
 
     if (!workoutId) {
       return NextResponse.json(
